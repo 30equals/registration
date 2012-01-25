@@ -340,6 +340,23 @@ function registration_email_has_registered($entity_id, $entity_type, $email) {
 }
 
 /**
+ * Helper to determine if a certain emailaddress is already registered for an entity.
+ */
+function registration_get_registration_id($entity_id, $entity_type, $email) {
+  
+  $registration_id = db_select('registration', 'r')
+          ->fields('r', array('registration_id'))
+          ->condition('entity_id', $entity_id)
+          ->condition('entity_type', $entity_type)
+          ->condition('mail', $email)
+          ->execute()
+          ->fetchField();
+ 
+  return $registration_id;
+  
+}
+
+/**
  * Implements hook_entity_delete().
  *   Delete registrations and settings for this entity.
  */

@@ -121,22 +121,24 @@ function registration_field_formatter_view($entity_type, $entity, $field, $insta
         // enable registration link if accessible
         if (registration_register_page_access($entity_type, $entity)) {
           
-          //if already registered
-          //cancel registration button
-          if(registration_has_room($entity_id, $entity_type)){
+          global $user;
+          $uri = entity_uri($entity_type, $entity);
+          list($entity_id, ,) = entity_extract_ids($entity_type, $entity);
+          if(registration_email_has_registered($entity_id, $entity_type, $user->mail)){
           
-            $uri = entity_uri($entity_type, $entity);
+            $registration_id = registration_get_registration_id($entity_id, $entity_type, $user->mail);
+            $path = 'registration/' . $registration_id .'/delete';
+            $label = t('Cancel registration');
           
           }
           else{
-          //if not yet registered
-          //register button
           
-            $uri = entity_uri($entity_type, $entity);
+            $path = $uri['path']. '/register';
+            $label = t('Register');
           
           }
           
-          $element[0] = array('#markup' => theme('registration_link',array('label' => $reg_type->label, 'path'  => $uri['path']. '/register')));
+          $element[0] = array('#markup' => theme('registration_link',array('label' => $label, 'path'  => $path)));
         }
         break;
       case 'registration_form':
