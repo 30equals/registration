@@ -97,18 +97,8 @@ function registration_form_validate($form, &$form_state) {
   }
 	// check for duplicate registrations
 	else {
-		$query = db_select('registration', 'r')
-			->condition('entity_id', $registration->entity_id)
-      ->condition('entity_type', $registration->entity_type)
-			->condition('mail', $form_state['values']['mail']);
-		
-		// exclude existing registration
-		if (isset($registration->registration_id)) {
-			$query->condition('registration_id', $registration->registration_id, '<>');
-		}
 
-		$count = $query->countQuery()->execute()->fetchField();		
-		if ($count > 0) {
+		if (registration_email_has_registered($registration->entity_id, $registration->entity_type, $form_state['values']['mail'])) {
 			form_set_error('mail', t('%mail is already registered for this event.', 
 				array('%mail' => $form_state['values']['mail'])));
 		}

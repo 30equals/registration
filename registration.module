@@ -320,6 +320,26 @@ function registration_event_count($entity_id, $entity_type) {
 }
 
 /**
+ * Helper to determine if a certain emailaddress is already registered for an entity.
+ */
+function registration_email_has_registered($entity_id, $entity_type, $email) {
+  $ret = FALSE;
+
+  $query = db_select('registration', 'r')
+          ->condition('entity_id', $entity_id)
+          ->condition('entity_type', $entity_type)
+          ->condition('mail', $email);
+
+  $count = $query->countQuery()->execute()->fetchField();
+
+  if ($count > 0) {
+    $ret = TRUE;
+  }
+
+  return $ret;
+}
+
+/**
  * Implements hook_entity_delete().
  *   Delete registrations and settings for this entity.
  */

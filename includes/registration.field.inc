@@ -86,6 +86,10 @@ function registration_field_formatter_info() {
       'label' => t('Registration Link'),
       'field types' => array('registration'),
     ),
+    'registration_toggle_link' => array(
+      'label' => t('Registration Toggle Link'),
+      'field types' => array('registration'),
+    ),
     'registration_form' => array(
       'label' => t('Registration Form'),
       'field types' => array('registration'),
@@ -110,6 +114,28 @@ function registration_field_formatter_view($entity_type, $entity, $field, $insta
         // enable registration link if accessible
         if (registration_register_page_access($entity_type, $entity)) {
           $uri = entity_uri($entity_type, $entity);
+          $element[0] = array('#markup' => theme('registration_link',array('label' => $reg_type->label, 'path'  => $uri['path']. '/register')));
+        }
+        break;
+      case 'registration_toggle_link':
+        // enable registration link if accessible
+        if (registration_register_page_access($entity_type, $entity)) {
+          
+          //if already registered
+          //cancel registration button
+          if(registration_has_room($entity_id, $entity_type)){
+          
+            $uri = entity_uri($entity_type, $entity);
+          
+          }
+          else{
+          //if not yet registered
+          //register button
+          
+            $uri = entity_uri($entity_type, $entity);
+          
+          }
+          
           $element[0] = array('#markup' => theme('registration_link',array('label' => $reg_type->label, 'path'  => $uri['path']. '/register')));
         }
         break;
