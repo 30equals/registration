@@ -39,7 +39,7 @@ function registration_menu() {
     'title' => 'Delete Registration',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('registration_delete_confirm', 1),
-    'access arguments' => array('administer registration'),
+    'access callback' => 'registration_delete_access_callback',
     'file' => 'includes/registration.forms.inc',
   );
 
@@ -128,6 +128,13 @@ function registration_permission() {
       'title' => t('Delete own registrations'),
     ),
   );
+}
+
+/**
+ * Access callback function.
+ */
+function registration_delete_access_callback() {
+  return user_access('administer registration') || user_access('delete own registration');
 }
 
 /**
