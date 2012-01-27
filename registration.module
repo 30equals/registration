@@ -343,7 +343,7 @@ function registration_email_has_registered($entity_id, $entity_type, $email) {
 }
 
 /**
- * Helper to the registration id of an entity.
+ * Helper to get the registration id of an entity.
  */
 function registration_get_registration_id($entity_id, $entity_type, $email) {
   
