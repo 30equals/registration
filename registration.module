@@ -124,6 +124,9 @@ function registration_permission() {
     'add registration' => array(
       'title' => t('Add registrations'),
     ),
+    'delete own registration' => array(
+      'title' => t('Delete own registrations'),
+    ),
   );
 }
 
@@ -340,7 +343,7 @@ function registration_email_has_registered($entity_id, $entity_type, $email) {
 }
 
 /**
- * Helper to determine if a certain emailaddress is already registered for an entity.
+ * Helper to the registration id of an entity.
  */
 function registration_get_registration_id($entity_id, $entity_type, $email) {
   
@@ -602,4 +605,46 @@ function registration_get_entity_registration_type($entity_type, $entity) {
   }
 
   return $ret;
+}
+
+
+
+/**
+ * Implements hook_rules_action_info() on behalf of the user module.
+ */
+function registration_rules_action_info() {
+  $defaults = array(
+   'parameter' => array(
+      'registration_entity' => array(
+        'label' => t('Registration entity'),
+        'enabled' => TRUE,
+      ),
+    ),
+    'group' => t('Registration'),
+    'access callback' => 'rules_registration_access',
+  );
+  $items['registration_enable'] = $defaults + array(
+    'label' => t('Block a user'),
+    'base' => 'rules_action_user_block',
+  );
+  
+  return $items;
+}
+
+/**
+ * Action: Unblock a user.
+ */
+function rules_registration_enable($registration_entity) {
+  $registration_entity->status = 1;
+}
+
+/**
+ * User integration access callback.
+ */
+function rules_registration_access($type, $name) {
+  if ($type == 'event' || $type == 'condition') {
+    return entity_metadata_entity_access('view', 'user');
+  }
+  // Else return admin access.
+  return user_access('administer users');
 }
