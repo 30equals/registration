@@ -183,7 +183,7 @@ function registration_delete_confirm_submit($form, &$form_state) {
     drupal_set_message(t('Registration %id has been deleted.', array('%id' => $registration->registration_id)));
   }
 
-  $form_state['redirect'] = 'node/' . $registration->nid;
+  $form_state['redirect'] = 'node/' . $registration->entity_id;
 }
 
 /**
